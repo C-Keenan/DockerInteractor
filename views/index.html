@@ -2,14 +2,24 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>View Files</title>
+        <title>Container List</title>
     </head>
     <body>
-        <h1>{{ .CtrName }}:</h1>
+        <h1>Container List</h1>
+        {{ range $index, $ctr := .CtrData }}
         <ul>
-            {{ range $index, $ := index $.Files }}
-                <li><a href="/view/{{ $file.Name }}">{{ $file.Name }}</a></li>
-            {{ end }}
+            <h3>{{ index $ctr "CtrName" }}</h3>
+            <p>{{ index $ctr "CtrImg" }}, {{ index $ctr "CtrStat" }}</p>
+            <form method="post" enctype="multipart/form-data" action='/api-path/{{ index $ctr "CtrID" }}'>
+                <input type="submit" value="Start"/>
+            </form>
+            <form method="post" enctype="multipart/form-data" action='/api-path/{{ index $ctr "CtrID" }}'>
+                <input type="submit" value="Stop"/>
+            </form>
+            <form method="post" enctype="multipart/form-data" action='/api-path/{{ index $ctr "CtrID" }}'>
+                <input type="submit" value="Restart"/>
+            </form>
         </ul>
+        {{ end }}
     </body>
 </html>

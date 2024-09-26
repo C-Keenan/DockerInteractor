@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	http.HandleFunc("/ctrlist", controllers.ListAllContainers)
+	http.HandleFunc("/", controllers.ListAllContainers)
 	err := godotenv.Load()
 	if err != nil {
 		fmt.Println("Error loading .env file")

@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"context"
+	"fmt"
 	"html/template"
 	"net/http"
 
@@ -10,7 +11,10 @@ import (
 )
 
 func ListAllContainers(w http.ResponseWriter, r *http.Request) {
-	tmplt, _ := template.ParseGlob("views/index.html")
+	tmplt, err := template.ParseGlob("views/index.html")
+	if err != nil {
+		panic(err)
+	}
 
 	apiClient, err := client.NewClientWithOpts(client.FromEnv)
 	if err != nil {
@@ -23,20 +27,21 @@ func ListAllContainers(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	ctrdata := map[string]interface{}{
-		"CtrID":   "",
-		"CtrImg":  "",
-		"CtrStat": "",
-		"CtrName": "",
+	CtrData := map[string]interface{}{
+		"CtrID":   "ID",
+		"CtrImg":  "Img",
+		"CtrStat": "Stat",
+		"CtrName": "Name",
 	}
 
 	for _, ctr := range containers {
-		ctrdata["CtrID"] = ctr.ID
-		ctrdata["CtrImg"] = ctr.Image
-		ctrdata["CtrStat"] = ctr.Status
-		ctrdata["CtrName"] = ctr.Names
+		CtrData["CtrID"] = ctr.ID
+		CtrData["CtrImg"] = ctr.Image
+		CtrData["CtrStat"] = ctr.Status
+		CtrData["CtrName"] = ctr.Names
 
 	}
 
-	tmplt.Execute(w, ctrdata)
+	fmt.Printf("%+v\n", CtrData)
+	tmplt.Execute(w, CtrData)
 }
